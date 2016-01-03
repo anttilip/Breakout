@@ -9,7 +9,7 @@ public class GameScreen extends Screen{
 
     public GameScreen(ScreenManager screenManager) {
         super(screenManager);
-        _entityWorld =  new EntityWorld();
+        _entityWorld =  new EntityWorld(_screenSize);
     }
 
     @Override

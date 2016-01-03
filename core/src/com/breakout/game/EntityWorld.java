@@ -1,6 +1,5 @@
 package com.breakout.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -10,9 +9,8 @@ public class EntityWorld {
     private Racket _racket;
     private Vector2 _screenSize;
 
-    public EntityWorld() {
-        _screenSize = new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
+    public EntityWorld(Vector2 screenSize) {
+        _screenSize = screenSize;
         _racket = new Racket(new Vector2(_screenSize.x/2 - 128, _screenSize.y/10 + 128),
                              new Vector2(_screenSize.x/5, _screenSize.y/68),
                              new Texture("Textures/racket.png"), this);
@@ -38,5 +36,9 @@ public class EntityWorld {
 
     public Racket getRacket() {
         return _racket;
+    }
+
+    public Vector2 getScreenSize() {
+        return _screenSize;
     }
 }

@@ -4,9 +4,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ScreenManager {
-
-    Screen _currentScreen;
-    BitmapFont _font;
+    private Screen _currentScreen;
+    private BitmapFont _font;
 
     public ScreenManager(BitmapFont font) {
         _font = font;
