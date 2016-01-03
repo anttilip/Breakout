@@ -23,5 +23,4 @@ public class ScreenManager {
     public void drawScreen(SpriteBatch batch) {
         _currentScreen.draw(batch);
     }
-
 }

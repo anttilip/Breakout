@@ -12,5 +12,4 @@ public abstract class Screen {
     abstract void update();
 
     abstract void draw(SpriteBatch batch);
-
 }
