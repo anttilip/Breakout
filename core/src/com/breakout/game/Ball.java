@@ -3,6 +3,8 @@ package com.breakout.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Ball extends GameObject {
@@ -12,8 +14,8 @@ public class Ball extends GameObject {
 
     public Ball(Vector2 position, Vector2 size, Texture texture, EntityWorld entityWorld) {
         super(position, size, texture, entityWorld);
-        _direction = new Vector2(1,1);
-        _speed = 10;
+        _direction = new Vector2(0, 1);
+        _speed = 18;
         _isOnRacket = true;
     }
 
@@ -37,13 +39,16 @@ public class Ball extends GameObject {
     }
 
     private void checkCollisions() {
-        // collision on wall
+        // collision against wall
         checkCollisionAgainstWall(_entityWorld.getScreenSize());
 
-        // collision on racket
+        // collision against racket
         if(checkCollision(_entityWorld.getRacket())) {
             onRacketCollision(_entityWorld.getRacket());
         }
+
+        // collision against blocks
+        checkCollisionAgainstBlocks();
     }
 
     private void checkCollisionAgainstWall(Vector2 screenSize) {
@@ -63,6 +68,46 @@ public class Ball extends GameObject {
 
     private boolean checkCollision(GameObject object) {
         return object.getRectangle().overlaps(this.getRectangle());
+    }
+
+    private void checkCollisionAgainstBlocks() {
+        for(Block block : _entityWorld.getBlockMap().getBlocks()) {
+            if(checkCollision(block)) {
+                onBlockCollision(block);
+                block.destroy();
+            }
+        }
+    }
+
+    private void onBlockCollision(Block block) {
+        Rectangle intersection = new Rectangle();
+        Intersector.intersectRectangles(block.getRectangle(), this.getRectangle(), intersection);
+
+        if(intersection.height > intersection.width) {  //this causes the "kissing a block" bug. Prev frame or direction fix?
+            //right or left side
+            if (intersection.x > block.getRectangle().x) {
+                //right
+                _position.x = block.getRectangle().x + block.getRectangle().getWidth() + 1;
+                _direction.x = Math.abs(_direction.x);
+            }
+            if (intersection.x + intersection.width < block.getRectangle().x + block.getRectangle().width) {
+                //left
+                _position.x = block.getRectangle().x - _size.x - 1;
+                _direction.x = Math.abs(_direction.x) * -1;
+            }
+        } else {
+            //top or bottom side
+            if (intersection.y > block.getRectangle().y) {
+                //top
+                _position.y = block.getRectangle().y + block.getRectangle().getHeight() + 1;
+                _direction.y = Math.abs(_direction.y);
+            }
+            if (intersection.y + intersection.height < block.getRectangle().y + block.getRectangle().height) {
+                //bottom
+                _position.y = block.getRectangle().y - _size.y - 1;
+                _direction.y = Math.abs(_direction.y) * -1;
+            }
+        }
     }
 
     private void onRacketCollision(Racket racket) {
@@ -91,6 +136,6 @@ public class Ball extends GameObject {
 
     private void onDeath() {
         _isOnRacket = true;
-        _direction = new Vector2(1,1);
+        _direction = new Vector2(0,1);
     }
 }
