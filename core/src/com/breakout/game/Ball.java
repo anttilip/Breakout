@@ -15,20 +15,20 @@ public class Ball extends GameObject {
     public Ball(Vector2 position, Vector2 size, Texture texture, EntityWorld entityWorld) {
         super(position, size, texture, entityWorld);
         _direction = new Vector2(0, 1);
-        _speed = 18;
+        _speed = 1000;
         _isOnRacket = true;
     }
 
     @Override
-    void update() {
+    void update(float deltaTime) {
         if(_isOnRacket) {
             onRacket();
             return;
         }
 
         //ball position update
-        _position.x += _direction.x * _speed;
-        _position.y += _direction.y * _speed;
+        _position.x += _direction.x * _speed * deltaTime;
+        _position.y += _direction.y * _speed * deltaTime;
 
         checkCollisions();
     }
@@ -72,7 +72,7 @@ public class Ball extends GameObject {
 
     private void checkCollisionAgainstBlocks() {
         for(Block block : _entityWorld.getBlockMap().getBlocks()) {
-            if(checkCollision(block)) {
+            if(block.isAlive() && checkCollision(block)) {
                 onBlockCollision(block);
                 block.destroy();
             }

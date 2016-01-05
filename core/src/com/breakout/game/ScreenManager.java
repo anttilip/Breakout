@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ScreenManager {
+    private final BitmapFont _font;
     private Screen _currentScreen;
-    private BitmapFont _font;
 
     public ScreenManager(BitmapFont font) {
         _font = font;
@@ -15,8 +15,8 @@ public class ScreenManager {
         _currentScreen = screen;
     }
 
-    public void updateScreen() {
-        _currentScreen.update();
+    public void updateScreen(float deltaTime) {
+        _currentScreen.update(deltaTime);
     }
 
     public void drawScreen(SpriteBatch batch) {

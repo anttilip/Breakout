@@ -11,7 +11,7 @@ public class Racket extends GameObject {
     }
 
     @Override
-    void update() {
+    void update(float deltaTime) {
         if(Gdx.input.isTouched()) {
             _position.x = Gdx.input.getX() - _size.x/2;
 

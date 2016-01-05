@@ -13,7 +13,7 @@ public abstract class Screen {
         _screenSize = new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
-    abstract void update();
+    abstract void update(float deltaTime);
 
     abstract void draw(SpriteBatch batch);
 }

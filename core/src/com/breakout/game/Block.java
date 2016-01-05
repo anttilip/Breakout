@@ -16,7 +16,7 @@ public class Block extends GameObject{
     }
 
     @Override
-    void update() {
+    void update(float deltaTime) {
 
     }
 

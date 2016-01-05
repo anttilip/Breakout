@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameScreen extends Screen{
-    private EntityWorld _entityWorld;
+    private final EntityWorld _entityWorld;
 
     public GameScreen(ScreenManager screenManager) {
         super(screenManager);
@@ -13,8 +13,8 @@ public class GameScreen extends Screen{
     }
 
     @Override
-    void update() {
-        _entityWorld.update();
+    void update(float deltaTime) {
+        _entityWorld.update(deltaTime);
     }
 
     @Override

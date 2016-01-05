@@ -1,6 +1,7 @@
 package com.breakout.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -19,17 +20,14 @@ public class Breakout extends ApplicationAdapter {
     }
 
     @Override
-    public void render () {
-        tick();
-    }
-
-    private void tick() {
-        update();
+    public void render() {
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        update(deltaTime);
         draw();
     }
 
-    private void update() {
-        _screenManager.updateScreen();
+    private void update(float deltaTime) {
+        _screenManager.updateScreen(deltaTime);
     }
 
     private void draw() {
@@ -38,3 +36,15 @@ public class Breakout extends ApplicationAdapter {
         _batch.end();
     }
 }
+
+
+/*
+TODO:
+- Resolution independent speeds (Constants class)
+- Gdx.gl.glClearColor(25 / 255f, 113 / 255f, 146 / 255f, 1f);  Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); ->  GraphicsHelper.clear(255, 255, 255);
+- rename GameObject.getRectangle() to getBounds?
+- ICollidiable
+  - entityWorld.getAll<ICollidiable>()
+  - getBounds and onCollision(Ball)
+
+*/

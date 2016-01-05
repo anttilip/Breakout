@@ -8,15 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockMap {
+    private final EntityWorld _entityWorld;
     private List<Block> _blocks;
     private int _blocksOnRow;
     private int _initialBlocksOnColumn;
-    private EntityWorld _entityWorld;
     private int _blockSize;
+    private float _secondsSinceLastNewRow;
+    private float _secondsToNewRow;
 
     public BlockMap(EntityWorld entityWorld) {
         _entityWorld = entityWorld;
         _blocks = new ArrayList<Block>();
+
+        _secondsToNewRow = 8;
+        _secondsSinceLastNewRow = 0;
         _blocksOnRow = 10;
         _initialBlocksOnColumn = 8;
         _blockSize = (int)(_entityWorld.getScreenSize().x / (_blocksOnRow * 1.5 + 0.5));
@@ -46,8 +51,13 @@ public class BlockMap {
         }
     }
 
-    public void update() {
-        removeDestroyedBlocks();
+    public void update(float deltaTime) {
+        _secondsSinceLastNewRow += deltaTime;
+        if(_secondsSinceLastNewRow >= _secondsToNewRow) {
+            removeDestroyedBlocks();
+            addLayer();
+            _secondsSinceLastNewRow = 0;
+        }
     }
 
     public void draw(SpriteBatch batch) {

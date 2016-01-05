@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Rectangle;
 
 public abstract class GameObject {
-    protected EntityWorld _entityWorld;
+    protected final EntityWorld _entityWorld;
     protected Vector2 _position;
     protected Vector2 _size;
     protected Texture _texture;
@@ -18,7 +18,7 @@ public abstract class GameObject {
         _entityWorld = entityWorld;
     }
 
-    abstract void update();
+    abstract void update(float deltaTime);
 
     abstract void draw(SpriteBatch batch);
 

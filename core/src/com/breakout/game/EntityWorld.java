@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class EntityWorld {
-    private Ball _ball;
-    private Racket _racket;
-    private BlockMap _blockMap;
-    private Vector2 _screenSize;
+    private final Ball _ball;
+    private final Racket _racket;
+    private final BlockMap _blockMap;
+    private final Vector2 _screenSize;
 
     public EntityWorld(Vector2 screenSize) {
         _screenSize = screenSize;
@@ -23,10 +23,10 @@ public class EntityWorld {
         _blockMap = new BlockMap(this);
     }
 
-    public void update() {
-        _ball.update();
-        _racket.update();
-        _blockMap.update();
+    public void update(float deltaTime) {
+        _ball.update(deltaTime);
+        _racket.update(deltaTime);
+        _blockMap.update(deltaTime);
     }
 
     public void draw(SpriteBatch batch) {
