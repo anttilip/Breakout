@@ -3,9 +3,10 @@ package com.breakout.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Racket extends GameObject {
+public class Racket extends GameObject implements ICollidable {
     public Racket(Vector2 position, Vector2 size, Texture texture, EntityWorld entityWorld) {
         super(position, size, texture, entityWorld);
     }
@@ -27,5 +28,28 @@ public class Racket extends GameObject {
     @Override
     void draw(SpriteBatch batch) {
         batch.draw(_texture, _position.x, _position.y, _size.x, _size.y);
+    }
+
+    @Override
+    public Rectangle getCollisionRectangle() {
+        return new Rectangle(_position.x, _position.y, _size.x, _size.y);
+    }
+
+    @Override
+    public Vector2 onCollision(Ball ball, Vector2 direction) {
+        // This changes balls direction based on where on racket the ball hits
+        direction.x = (ball.getPosition().x + (ball.getSize().x / 2) - _position.x) / (_size.x) * 2 - 1;
+        direction.nor();
+
+        // Don't allow too horizontal directions
+        if(direction.x > 0.75) {
+            direction.x = 0.75f;
+            direction.nor();
+        } else if(direction.x < -0.75f) {
+            direction.x = -0.75f;
+            direction.nor();
+        }
+
+        return direction;
     }
 }

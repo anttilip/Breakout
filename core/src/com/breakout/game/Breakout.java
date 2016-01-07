@@ -43,8 +43,5 @@ TODO:
 - Resolution independent speeds (Constants class)
 - Gdx.gl.glClearColor(25 / 255f, 113 / 255f, 146 / 255f, 1f);  Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); ->  GraphicsHelper.clear(255, 255, 255);
 - rename GameObject.getRectangle() to getBounds?
-- ICollidiable
-  - entityWorld.getAll<ICollidiable>()
-  - getBounds and onCollision(Ball)
 
 */

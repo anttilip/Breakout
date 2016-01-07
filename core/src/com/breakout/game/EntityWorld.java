@@ -1,50 +1,86 @@
 package com.breakout.game;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class EntityWorld {
-    private final Ball _ball;
-    private final Racket _racket;
-    private final BlockMap _blockMap;
     private final Vector2 _screenSize;
+
+    private final BlockMap _blockMap;
+    private List<GameObject> _gameObjects;
+    private Map<Class, List<GameObject>> _map;
 
     public EntityWorld(Vector2 screenSize) {
         _screenSize = screenSize;
-        _racket = new Racket(new Vector2(_screenSize.x/2 - 128, _screenSize.y/10 + 64),
-                             new Vector2(_screenSize.x/5, _screenSize.y/68),
-                             new Texture("Textures/racket.png"), this);
-
-        _ball = new Ball(new Vector2(_racket._position),
-                         new Vector2(_screenSize.x/20, _screenSize.x/20),
-                         new Texture("Textures/ball.png"), this);
-
+        _gameObjects = new ArrayList<GameObject>();
+        _map = new HashMap<Class, List<GameObject>>();
         _blockMap = new BlockMap(this);
     }
 
     public void update(float deltaTime) {
-        _ball.update(deltaTime);
-        _racket.update(deltaTime);
+        removeDestroyed();
+
+        for(GameObject gameObject : _gameObjects) {
+            gameObject.update(deltaTime);
+        }
+
         _blockMap.update(deltaTime);
     }
 
     public void draw(SpriteBatch batch) {
-        _ball.draw(batch);
-        _racket.draw(batch);
-        _blockMap.draw(batch);
+        for(GameObject gameObject : _gameObjects) {
+            gameObject.draw(batch);
+        }
     }
 
-    public Ball getBall() {
-        return _ball;
+    public void addGameObject(GameObject gameObject) {
+        _gameObjects.add(gameObject);
+        if(!_map.containsKey(gameObject.getClass())) {
+            _map.put(gameObject.getClass(), new ArrayList<GameObject>());
+        }
+        _map.get(gameObject.getClass()).add(gameObject);
     }
 
-    public Racket getRacket() {
-        return _racket;
+    public void removeDestroyed() {
+        for(Class key : _map.keySet()) {
+            List<GameObject> destroyed = new ArrayList<GameObject>();
+            for(GameObject gameObject : _map.get(key)) {
+                if(gameObject._isDestroyed) {
+                    destroyed.add(gameObject);
+                }
+            }
+            _map.get(key).removeAll(destroyed);
+            _gameObjects.removeAll(destroyed);
+        }
     }
 
-    public BlockMap getBlockMap() {
-        return _blockMap;
+    public <T> List<T> getAll(Class<T> type) {
+        List<T> instances = new ArrayList<T>();
+        for(Class<GameObject> c : _map.keySet()) {
+            if(type.isAssignableFrom(c)) {
+                instances.addAll((List<T>) _map.get(c));
+            }
+        }
+
+        return instances;
+    }
+
+    public <T extends GameObject> T get(Class<T> type) {
+        if(_map.get(type).size() == 1) {
+            return (T) _map.get(type).get(0);
+        }
+
+        for(GameObject gameObject : _gameObjects) {
+            if(type.isInstance(gameObject)) {
+                return (T) gameObject;
+            }
+        }
+        return null;
     }
 
     public Vector2 getScreenSize() {

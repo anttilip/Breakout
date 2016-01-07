@@ -2,17 +2,17 @@ package com.breakout.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Block extends GameObject{
+public class Block extends GameObject implements ICollidable {
     private int _durability;
     private int _gapSize;
-    private boolean _isAlive = true;
 
     public Block(Vector2 position, Vector2 size, Texture texture, EntityWorld entityWorld) {
         super(position, size, texture, entityWorld);
         _durability = 1;
-        _gapSize = (int)(size.x * 0.5f);
+        _gapSize = (int) (size.x * 0.5f);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class Block extends GameObject{
 
     @Override
     void draw(SpriteBatch batch) {
-        if(_isAlive) {
+        if (!_isDestroyed) {
             batch.draw(_texture, _position.x, _position.y, _size.x, _size.y);
         }
     }
@@ -32,10 +32,17 @@ public class Block extends GameObject{
     }
 
     public void destroy() {
-        _isAlive = false;
+        _isDestroyed = true;
     }
 
-    public boolean isAlive() {
-        return _isAlive;
+    @Override
+    public Rectangle getCollisionRectangle() {
+        return new Rectangle(_position.x, _position.y, _size.x, _size.y);
+    }
+
+    @Override
+    public Vector2 onCollision(Ball ball, Vector2 direction) {
+        if (!_isDestroyed) destroy();
+        return direction;
     }
 }
