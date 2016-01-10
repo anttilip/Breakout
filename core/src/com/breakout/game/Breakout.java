@@ -42,6 +42,10 @@ public class Breakout extends ApplicationAdapter {
 TODO:
 - Resolution independent speeds (Constants class)
 - Gdx.gl.glClearColor(25 / 255f, 113 / 255f, 146 / 255f, 1f);  Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); ->  GraphicsHelper.clear(255, 255, 255);
-- rename GameObject.getRectangle() to getBounds?
+- Descending blocks kill zone
+- Player Class with score and lives
+- Different blocks
+- Drops?
+- Screens
 
 */

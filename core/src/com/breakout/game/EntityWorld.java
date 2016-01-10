@@ -1,7 +1,6 @@
 package com.breakout.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,27 +8,30 @@ import java.util.List;
 import java.util.Map;
 
 public class EntityWorld {
-    private final Vector2 _screenSize;
+    private final List<GameObject> _gameObjects;
+    private final Map<Class, List<GameObject>> _map;
+    private List<GameObject> _gameObjectsToAdd;
+    private boolean _currentlyInUpdate;
 
-    private final BlockMap _blockMap;
-    private List<GameObject> _gameObjects;
-    private Map<Class, List<GameObject>> _map;
-
-    public EntityWorld(Vector2 screenSize) {
-        _screenSize = screenSize;
+    public EntityWorld() {
         _gameObjects = new ArrayList<GameObject>();
+        _gameObjectsToAdd = new ArrayList<GameObject>();
         _map = new HashMap<Class, List<GameObject>>();
-        _blockMap = new BlockMap(this);
+        _currentlyInUpdate = false;
     }
 
     public void update(float deltaTime) {
+        _currentlyInUpdate = true;
         removeDestroyed();
+        for(GameObject gameObject : _gameObjectsToAdd) {
+            addGameObjectInternal(gameObject);
+        }
+        _gameObjectsToAdd.clear();
 
         for(GameObject gameObject : _gameObjects) {
             gameObject.update(deltaTime);
         }
-
-        _blockMap.update(deltaTime);
+        _currentlyInUpdate = false;
     }
 
     public void draw(SpriteBatch batch) {
@@ -39,6 +41,14 @@ public class EntityWorld {
     }
 
     public void addGameObject(GameObject gameObject) {
+        if(_currentlyInUpdate) {
+            _gameObjectsToAdd.add(gameObject);
+        } else {
+            addGameObjectInternal(gameObject);
+        }
+    }
+
+    private void addGameObjectInternal(GameObject gameObject) {
         _gameObjects.add(gameObject);
         if(!_map.containsKey(gameObject.getClass())) {
             _map.put(gameObject.getClass(), new ArrayList<GameObject>());
@@ -52,6 +62,7 @@ public class EntityWorld {
             for(GameObject gameObject : _map.get(key)) {
                 if(gameObject._isDestroyed) {
                     destroyed.add(gameObject);
+                    gameObject.destroy();
                 }
             }
             _map.get(key).removeAll(destroyed);
@@ -71,7 +82,7 @@ public class EntityWorld {
     }
 
     public <T extends GameObject> T get(Class<T> type) {
-        if(_map.get(type).size() == 1) {
+        if(_map.containsKey(type) && _map.get(type).size() == 1) {
             return (T) _map.get(type).get(0);
         }
 
@@ -81,9 +92,5 @@ public class EntityWorld {
             }
         }
         return null;
-    }
-
-    public Vector2 getScreenSize() {
-        return _screenSize;
     }
 }

@@ -6,13 +6,17 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Block extends GameObject implements ICollidable {
+    private Vector2 _size;
+    private Texture _texture;
     private int _durability;
-    private int _gapSize;
+    private float _gapSize;
 
     public Block(Vector2 position, Vector2 size, Texture texture, EntityWorld entityWorld) {
-        super(position, size, texture, entityWorld);
+        super(position, entityWorld);
+        _size = size;
+        _texture = texture;
         _durability = 1;
-        _gapSize = (int) (size.x * 0.5f);
+        _gapSize = size.x * 0.5f;
     }
 
     @Override

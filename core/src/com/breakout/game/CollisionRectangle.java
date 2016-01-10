@@ -1,15 +1,18 @@
 package com.breakout.game;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class CollisionRectangle extends GameObject implements ICollidable {
-    private Rectangle _rectangle;
+    private final Rectangle _rectangle;
+    private Texture _texture;
 
     public CollisionRectangle(float x, float y, float width, float height, EntityWorld entityWorld) {
-        super(new Vector2(x, y), new Vector2(width, height), null, entityWorld);
+        super(new Vector2(x, y), entityWorld);
         _rectangle = new Rectangle(x, y, width, height);
+        _texture = new Texture("Textures/black_square.png");
     }
 
     @Override
@@ -29,6 +32,6 @@ public class CollisionRectangle extends GameObject implements ICollidable {
 
     @Override
     void draw(SpriteBatch batch) {
-
+        batch.draw(_texture, _position.x, _position.y, _rectangle.width, _rectangle.height);
     }
 }

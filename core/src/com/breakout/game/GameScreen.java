@@ -11,24 +11,31 @@ public class GameScreen extends Screen{
 
     public GameScreen(ScreenManager screenManager) {
         super(screenManager);
-        _entityWorld =  new EntityWorld(_screenSize);
-        _entityWorld.addGameObject(new Racket(new Vector2(_screenSize.x / 2 - 128, _screenSize.y / 8),
-                                              new Vector2(_screenSize.x / 5, _screenSize.y / 68),
-                                              new Texture("Textures/racket.png"), _entityWorld));
 
-        _entityWorld.addGameObject(new Ball(new Vector2(_entityWorld.get(Racket.class)._position),
-                                            new Vector2(_screenSize.x / 20, _screenSize.x / 20),
-                                            new Texture("Textures/ball.png"), _entityWorld));
+        _entityWorld =  new EntityWorld();
 
-        // Make walls
-        _entityWorld.addGameObject(new CollisionRectangle(-_screenSize.x, 0, _screenSize.x,
-                                                         _screenSize.y, _entityWorld));
+        _entityWorld.addGameObject(new BreakoutCamera(_entityWorld));
 
-        _entityWorld.addGameObject(new CollisionRectangle(_screenSize.x, 0, _screenSize.x,
-                                                         _screenSize.y, _entityWorld));
+        _entityWorld.addGameObject(new Racket(new Vector2(45 - 10, 20),
+                new Vector2(20, 2),
+                new Texture("Textures/white_square.png"), _entityWorld));
 
-        _entityWorld.addGameObject(new CollisionRectangle(-_screenSize.x, _screenSize.y,
-                                                         _screenSize.x * 3, _screenSize.x, _entityWorld));
+        _entityWorld.addGameObject(new Ball(new Vector2(0, 0),
+                new Vector2(5, 5),
+                new Texture("Textures/ball.png"), _entityWorld));
+
+        _entityWorld.addGameObject(new BlockMap(_entityWorld));
+
+        // Make left wall
+        _entityWorld.addGameObject(new CollisionRectangle(-Constants.WORLD_SIZE.x, 0,
+                Constants.WORLD_SIZE.x, Constants.WORLD_SIZE.y, _entityWorld));
+        // Make right wall
+        _entityWorld.addGameObject(new CollisionRectangle(Constants.WORLD_SIZE.x, 0,
+                Constants.WORLD_SIZE.x, Constants.WORLD_SIZE.y, _entityWorld));
+        // Make top wall
+        _entityWorld.addGameObject(new CollisionRectangle(-Constants.WORLD_SIZE.x,
+                Constants.WORLD_SIZE.y, Constants.WORLD_SIZE.x * 3,
+                Constants.WORLD_SIZE.y, _entityWorld));
 
     }
 
@@ -39,6 +46,7 @@ public class GameScreen extends Screen{
 
     @Override
     void draw(SpriteBatch batch) {
+        batch.setProjectionMatrix(_entityWorld.get(BreakoutCamera.class).getMatrix());
         Gdx.gl.glClearColor(25 / 255f, 113 / 255f, 146 / 255f, 1f);  // background color
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

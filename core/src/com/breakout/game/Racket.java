@@ -7,20 +7,24 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Racket extends GameObject implements ICollidable {
+    private Vector2 _size;
+    private Texture _texture;
     public Racket(Vector2 position, Vector2 size, Texture texture, EntityWorld entityWorld) {
-        super(position, size, texture, entityWorld);
+        super(position, entityWorld);
+        _size = size;
+        _texture = texture;
     }
 
     @Override
     void update(float deltaTime) {
         if(Gdx.input.isTouched()) {
-            _position.x = Gdx.input.getX() - _size.x/2;
+            _position.x = _entityWorld.get(BreakoutCamera.class).xToWorld(Gdx.input.getX()) - _size.x/2;
 
             // Racket can't go out of bounds
             if(_position.x < 0) {
                 _position.x = 0;
-            } else if(_position.x + _size.x > _entityWorld.getScreenSize().x) {
-                _position.x = _entityWorld.getScreenSize().x - _size.x;
+            } else if(_position.x + _size.x > Constants.WORLD_SIZE.x) {
+                _position.x = Constants.WORLD_SIZE.x - _size.x;
             }
         }
     }
@@ -51,5 +55,13 @@ public class Racket extends GameObject implements ICollidable {
         }
 
         return direction;
+    }
+
+    public Vector2 getSize() {
+        return _size;
+    }
+
+    public Vector2 getPosition() {
+        return _position;
     }
 }

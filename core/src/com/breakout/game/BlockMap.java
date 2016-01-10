@@ -1,53 +1,59 @@
 package com.breakout.game;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-public class BlockMap {
-    private static final int BlocksOnRow = 10;
-    private static final int InitialBlocksOnColumn = 8;
-    private static final float SecondsBetweenNewRows = 8;
+public class BlockMap extends GameObject{
+    private static final int BLOCKS_ON_ROW = 10;
+    private static final int INITIAL_BLOCKS_ON_COLUMN = 8;
+    private static final float SECONDS_BETWEEN_NEW_ROWS = 8;
 
     private final EntityWorld _entityWorld;
-    private int _blockSize;
+    private final float _blockSize;
     private float _secondsSinceLastNewRow;
 
     public BlockMap(EntityWorld entityWorld) {
+        super(Vector2.Zero, entityWorld);
         _entityWorld = entityWorld;
         _secondsSinceLastNewRow = 0;
-        _blockSize = (int)(_entityWorld.getScreenSize().x / (BlocksOnRow * 1.5 + 0.5));
+        _blockSize = Constants.WORLD_SIZE.x / (BLOCKS_ON_ROW * 1.5f + 0.5f);
 
-        generateLayers(InitialBlocksOnColumn);
+        generateInitialRows();
     }
 
     public void update(float deltaTime) {
         _secondsSinceLastNewRow += deltaTime;
-        if(_secondsSinceLastNewRow >= SecondsBetweenNewRows) {
-            addLayer();
+        if(_secondsSinceLastNewRow >= SECONDS_BETWEEN_NEW_ROWS) {
+            addNewRow();
             _secondsSinceLastNewRow = 0;
         }
     }
 
-    private void addLayer() {
+    @Override
+    void draw(SpriteBatch batch) {
+
+    }
+
+    private void addNewRow() {
         // Move existing blocks down
         for(Block block : _entityWorld.getAll(Block.class)) {
             block.moveDown();
         }
 
-        // Add new layer
-        for(int i = 0; i < BlocksOnRow; i++) {
-            _entityWorld.addGameObject(new Block(new Vector2(
-                    _blockSize / 2 + (_blockSize * 1.5f) * i,
-                    _entityWorld.getScreenSize().y - 2 * _blockSize),
+        // Add new row
+        for(int i = 0; i < BLOCKS_ON_ROW; i++) {
+            _entityWorld.addGameObject(new Block(new Vector2(_blockSize / 2 + (_blockSize * 1.5f) * i,
+                        Constants.WORLD_SIZE.y - 2 * _blockSize),
                     new Vector2(_blockSize, _blockSize),
-                    new Texture("Textures/racket.png"),
+                    new Texture("Textures/white_square.png"),
                     _entityWorld));
         }
     }
 
-    private void generateLayers(int n) {
-        for(int i = 0; i < n; i++) {
-            addLayer();
+    private void generateInitialRows() {
+        for(int i = 0; i < INITIAL_BLOCKS_ON_COLUMN; i++) {
+            addNewRow();
         }
     }
 }
