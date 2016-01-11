@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Racket extends GameObject implements ICollidable {
     private Vector2 _size;
     private Texture _texture;
+
     public Racket(Vector2 position, Vector2 size, Texture texture, EntityWorld entityWorld) {
         super(position, entityWorld);
         _size = size;

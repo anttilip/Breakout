@@ -33,6 +33,9 @@ public class Block extends GameObject implements ICollidable {
 
     public void moveDown() {
         _position.y -= _size.y + _gapSize;
+        if(_position.y <= Constants.KILLZONE_HEIGHT) {
+            destroy();
+        }
     }
 
     public void destroy() {

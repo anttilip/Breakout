@@ -8,21 +8,24 @@ public class BlockMap extends GameObject{
     private static final int BLOCKS_ON_ROW = 10;
     private static final int INITIAL_BLOCKS_ON_COLUMN = 8;
     private static final float SECONDS_BETWEEN_NEW_ROWS = 8;
+    private static final float SIZE = Constants.WORLD_SIZE.x / (BLOCKS_ON_ROW * 1.5f + 0.5f);
 
     private final EntityWorld _entityWorld;
-    private final float _blockSize;
     private float _secondsSinceLastNewRow;
 
     public BlockMap(EntityWorld entityWorld) {
         super(Vector2.Zero, entityWorld);
         _entityWorld = entityWorld;
         _secondsSinceLastNewRow = 0;
-        _blockSize = Constants.WORLD_SIZE.x / (BLOCKS_ON_ROW * 1.5f + 0.5f);
 
         generateInitialRows();
     }
 
     public void update(float deltaTime) {
+        if(_entityWorld.get(Ball.class).isOnRacket()) {
+            return;
+        }
+
         _secondsSinceLastNewRow += deltaTime;
         if(_secondsSinceLastNewRow >= SECONDS_BETWEEN_NEW_ROWS) {
             addNewRow();
@@ -43,9 +46,9 @@ public class BlockMap extends GameObject{
 
         // Add new row
         for(int i = 0; i < BLOCKS_ON_ROW; i++) {
-            _entityWorld.addGameObject(new Block(new Vector2(_blockSize / 2 + (_blockSize * 1.5f) * i,
-                        Constants.WORLD_SIZE.y - 2 * _blockSize),
-                    new Vector2(_blockSize, _blockSize),
+            _entityWorld.addGameObject(new Block(new Vector2(SIZE / 2 + (SIZE * 1.5f) * i,
+                        Constants.WORLD_SIZE.y - 2 * SIZE),
+                    new Vector2(SIZE, SIZE),
                     new Texture("Textures/white_square.png"),
                     _entityWorld));
         }

@@ -10,6 +10,7 @@ import java.util.Map;
 public class EntityWorld {
     private final List<GameObject> _gameObjects;
     private final Map<Class, List<GameObject>> _map;
+
     private List<GameObject> _gameObjectsToAdd;
     private boolean _currentlyInUpdate;
 
@@ -21,17 +22,20 @@ public class EntityWorld {
     }
 
     public void update(float deltaTime) {
-        _currentlyInUpdate = true;
         removeDestroyed();
-        for(GameObject gameObject : _gameObjectsToAdd) {
-            addGameObjectInternal(gameObject);
-        }
-        _gameObjectsToAdd.clear();
+        _currentlyInUpdate = true;
 
         for(GameObject gameObject : _gameObjects) {
             gameObject.update(deltaTime);
         }
+
         _currentlyInUpdate = false;
+
+        // Add created GameObjects to _gameObjects
+        for(GameObject gameObject : _gameObjectsToAdd) {
+            addGameObjectInternal(gameObject);
+        }
+        _gameObjectsToAdd.clear();
     }
 
     public void draw(SpriteBatch batch) {
@@ -82,15 +86,11 @@ public class EntityWorld {
     }
 
     public <T extends GameObject> T get(Class<T> type) {
-        if(_map.containsKey(type) && _map.get(type).size() == 1) {
+        // If game object is unique, return it
+        if(_map.containsKey(type)) {
             return (T) _map.get(type).get(0);
         }
 
-        for(GameObject gameObject : _gameObjects) {
-            if(type.isInstance(gameObject)) {
-                return (T) gameObject;
-            }
-        }
         return null;
     }
 }

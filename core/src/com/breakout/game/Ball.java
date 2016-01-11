@@ -121,6 +121,10 @@ public class Ball extends GameObject {
         return _position;
     }
 
+    public boolean isOnRacket() {
+        return _isOnRacket;
+    }
+
     private boolean isLaunchAreaPressed() {
         float touchPointInWorld = _entityWorld.get(BreakoutCamera.class).yToWorld(Gdx.input.getY());
         float racketPositionY = _entityWorld.get(Racket.class).getPosition().y;
