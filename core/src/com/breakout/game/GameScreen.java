@@ -50,10 +50,12 @@ public class GameScreen extends Screen{
         batch.setProjectionMatrix(_entityWorld.get(BreakoutCamera.class).getMatrix());
         drawBackground(batch, shapeRenderer);
         drawGameObjects(batch);
+
         if (this._entityWorld.getPlayer().isAlive()) {
             drawGameObjects(batch);
         } else {
-            drawEndScreen(batch);
+            this._screenManager.changeScreen(new GameOverScreen(this._screenManager,
+                    this._entityWorld.getPlayer().getScore()));
         }
     }
 
@@ -78,9 +80,5 @@ public class GameScreen extends Screen{
         }
 
         shapeRenderer.end();
-    }
-
-    private void drawEndScreen(SpriteBatch batch) {
-
     }
 }
