@@ -1,11 +1,9 @@
 package com.breakout.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Matrix4;
 
 public class Player {
@@ -22,6 +20,7 @@ public class Player {
 
     public Player(EntityWorld entityWorld) {
         this.entityWorld = entityWorld;
+        this.font = Fonts.getScoreFont();
         this.alive = true;
         this.lifeTexture = new Texture("Textures/small_red_heart.png");
         this.fontProjMatrix = new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(),
@@ -29,8 +28,6 @@ public class Player {
         this.score = 0;
         this.lives = 3;
         this.scoreString = "0";
-        createFonts();
-
     }
 
     public boolean isAlive() {
@@ -51,10 +48,8 @@ public class Player {
         if (this.lives == 0) {
             this.alive = false;
         }
-
         // When life is lost, shake the camera
         this.entityWorld.get(BreakoutCamera.class).shakeCamera(0.2f);
-
     }
 
     public void gainLife() {
@@ -80,14 +75,5 @@ public class Player {
         batch.setProjectionMatrix(fontProjMatrix);
         this.font.draw(batch, this.scoreString, 10,  Constants.SCREEN_SIZE.y - 10);
         batch.setProjectionMatrix(entityWorld.get(BreakoutCamera.class).getMatrix());
-    }
-
-    private void createFonts() {
-        FileHandle fontFile = Gdx.files.internal("game_over.ttf");
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int) (50 * Gdx.graphics.getDensity());
-        this.font = generator.generateFont(parameter);
-        generator.dispose();
     }
 }

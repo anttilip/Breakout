@@ -2,13 +2,11 @@ package com.breakout.game;
 
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Align;
@@ -17,8 +15,8 @@ import com.badlogic.gdx.utils.Align;
 public class GameOverScreen extends Screen {
     private GlyphLayout layout;
     private BitmapFont bigFont;
+    private BitmapFont mediumFont;
     private BitmapFont smallFont;
-    private BitmapFont smallestFont;
     private String bigText;
     private String smallText;
     private String infoText;
@@ -28,12 +26,15 @@ public class GameOverScreen extends Screen {
 
     public GameOverScreen(ScreenManager screenManager, int finalScore) {
         super(screenManager);
-        createFonts();
+        this.smallFont = Fonts.getSmallFont();
+        this.mediumFont = Fonts.getMediumFont();
+        this.bigFont = Fonts.getBigFont();
+
         this.bigText = "GAME\nOVER";
         this.smallText = "Your final score\nwas: " + finalScore;
         this.infoText = "Tap anywhere to try again";
         this.layout = new GlyphLayout();
-        this.inputDelay = 1 * 1000;
+        this.inputDelay = 1000; // One second delay
         this.initTime = System.currentTimeMillis();
 
         this.normalProjection = new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(),
@@ -62,25 +63,11 @@ public class GameOverScreen extends Screen {
 
         // Draw score text
         y += layout.height;
-        layout.setText(smallFont, smallText, Color.WHITE, Gdx.graphics.getWidth(), Align.center, true);
-        smallFont.draw(batch, layout, 0, Gdx.graphics.getHeight() * 0.8f - y);
+        layout.setText(mediumFont, smallText, Color.WHITE, Gdx.graphics.getWidth(), Align.center, true);
+        mediumFont.draw(batch, layout, 0, Gdx.graphics.getHeight() * 0.8f - y);
 
         // Draw try again text
-        layout.setText(smallestFont, infoText, Color.WHITE, Gdx.graphics.getWidth(), Align.center, true);
-        smallestFont.draw(batch, layout, 0 , Gdx.graphics.getHeight() * 0.1f);
-    }
-
-    private void createFonts() {
-        FileHandle fontFile = Gdx.files.internal("game_over.ttf");
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int) (200 * Gdx.graphics.getDensity());
-        System.out.println(Gdx.graphics.getDensity());
-        this.bigFont = generator.generateFont(parameter);
-        parameter.size = (int) (100 * Gdx.graphics.getDensity());
-        this.smallFont = generator.generateFont(parameter);
-        parameter.size = (int) (40 * Gdx.graphics.getDensity());
-        this.smallestFont = generator.generateFont(parameter);
-        generator.dispose();
+        layout.setText(smallFont, infoText, Color.WHITE, Gdx.graphics.getWidth(), Align.center, true);
+        smallFont.draw(batch, layout, 0 , Gdx.graphics.getHeight() * 0.1f);
     }
 }
