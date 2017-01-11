@@ -34,7 +34,7 @@ public class Ball extends GameObject {
         _position.x += _direction.x * _speed * deltaTime;
         _position.y += _direction.y * _speed * deltaTime;
 
-        if(_position.y < 0) {
+        if(_position.y + this._size.y * 2 < 0) {
             onDeath();
         }
 
