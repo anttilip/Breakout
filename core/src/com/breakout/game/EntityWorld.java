@@ -14,11 +14,14 @@ public class EntityWorld {
     private List<GameObject> _gameObjectsToAdd;
     private boolean _currentlyInUpdate;
 
+    private Player _player;
+
     public EntityWorld() {
         _gameObjects = new ArrayList<GameObject>();
         _gameObjectsToAdd = new ArrayList<GameObject>();
         _map = new HashMap<Class, List<GameObject>>();
         _currentlyInUpdate = false;
+        _player = new Player(this);
     }
 
     public void update(float deltaTime) {
@@ -42,6 +45,7 @@ public class EntityWorld {
         for(GameObject gameObject : _gameObjects) {
             gameObject.draw(batch);
         }
+        _player.draw(batch);
     }
 
     public void addGameObject(GameObject gameObject) {
@@ -92,5 +96,9 @@ public class EntityWorld {
         }
 
         return null;
+    }
+
+    public Player getPlayer() {
+        return this._player;
     }
 }

@@ -111,6 +111,7 @@ public class Ball extends GameObject {
     private void onDeath() {
         _isOnRacket = true;
         _direction = new Vector2(0,1);
+        _entityWorld.getPlayer().loseLife();
     }
 
     public Vector2 getSize() {

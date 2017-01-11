@@ -12,7 +12,7 @@ public class GameScreen extends Screen{
     public GameScreen(ScreenManager screenManager) {
         super(screenManager);
 
-        _entityWorld =  new EntityWorld();
+        _entityWorld = new EntityWorld();
 
         _entityWorld.addGameObject(new BreakoutCamera(_entityWorld));
 
@@ -46,10 +46,25 @@ public class GameScreen extends Screen{
 
     @Override
     void draw(SpriteBatch batch) {
+        if (this._entityWorld.getPlayer().isAlive()) {
+            drawGameObjects(batch);
+        } else {
+            drawEndScreen(batch);
+        }
+        // Draw end screen
+    }
+
+    private void drawGameObjects(SpriteBatch batch) {
+
+    }
+
+    private void drawBackground(SpriteBatch batch) {
         batch.setProjectionMatrix(_entityWorld.get(BreakoutCamera.class).getMatrix());
         Gdx.gl.glClearColor(25 / 255f, 113 / 255f, 146 / 255f, 1f);  // background color
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    }
 
-        _entityWorld.draw(batch);
+    private void drawEndScreen(SpriteBatch batch) {
+
     }
 }

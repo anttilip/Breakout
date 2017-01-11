@@ -35,11 +35,13 @@ public class Block extends GameObject implements ICollidable {
         _position.y -= _size.y + _gapSize;
         if(_position.y <= Constants.KILLZONE_HEIGHT) {
             destroy();
+            this._entityWorld.getPlayer().loseLife();
         }
     }
 
     public void destroy() {
         _isDestroyed = true;
+        this._entityWorld.getPlayer().increaseScore(this._durability * 100);
     }
 
     @Override
