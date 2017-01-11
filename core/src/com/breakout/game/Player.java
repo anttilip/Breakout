@@ -26,7 +26,9 @@ public class Player {
         this.lifeTexture = new Texture("Textures/small_red_heart.png");
         this.fontProjMatrix = new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(),
                                                                Gdx.graphics.getHeight());
-        this.reset();
+        this.score = 0;
+        this.lives = 3;
+        this.scoreString = "0";
         createFonts();
 
     }
@@ -61,12 +63,6 @@ public class Player {
 
     }
 
-    private void reset() {
-        this.lives = 3;
-        this.score = 0;
-        this.scoreString = Integer.toString(this.score);
-    }
-
     private void drawLives(SpriteBatch batch) {
         int offset = 0;
         for (int i = 1; i <= this.lives; i++) {
@@ -83,10 +79,10 @@ public class Player {
     }
 
     private void createFonts() {
-        FileHandle fontFile = Gdx.files.internal("Lato-Regular.ttf");
+        FileHandle fontFile = Gdx.files.internal("game_over.ttf");
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 60;
+        parameter.size = (int) (50 * Gdx.graphics.getDensity());
         this.font = generator.generateFont(parameter);
         generator.dispose();
     }

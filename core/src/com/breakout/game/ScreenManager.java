@@ -1,16 +1,13 @@
 package com.breakout.game;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+
 public class ScreenManager {
-    private final BitmapFont _font;
     private Screen _currentScreen;
 
-    public ScreenManager(BitmapFont font) {
-        _font = font;
-    }
+    public ScreenManager() {}
 
     public void changeScreen(Screen screen) {
         _currentScreen = screen;
