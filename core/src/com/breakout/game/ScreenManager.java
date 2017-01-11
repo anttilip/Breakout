@@ -2,6 +2,7 @@ package com.breakout.game;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class ScreenManager {
     private final BitmapFont _font;
@@ -19,7 +20,7 @@ public class ScreenManager {
         _currentScreen.update(deltaTime);
     }
 
-    public void drawScreen(SpriteBatch batch) {
-        _currentScreen.draw(batch);
+    public void drawScreen(SpriteBatch batch, ShapeRenderer shapeRenderer) {
+        _currentScreen.draw(batch, shapeRenderer);
     }
 }

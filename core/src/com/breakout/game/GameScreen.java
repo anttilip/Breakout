@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class GameScreen extends Screen{
@@ -45,23 +46,38 @@ public class GameScreen extends Screen{
     }
 
     @Override
-    void draw(SpriteBatch batch) {
+    void draw(SpriteBatch batch, ShapeRenderer shapeRenderer) {
+        batch.setProjectionMatrix(_entityWorld.get(BreakoutCamera.class).getMatrix());
+        drawBackground(batch, shapeRenderer);
+        drawGameObjects(batch);
         if (this._entityWorld.getPlayer().isAlive()) {
             drawGameObjects(batch);
         } else {
             drawEndScreen(batch);
         }
-        // Draw end screen
     }
 
     private void drawGameObjects(SpriteBatch batch) {
-
+        this._entityWorld.draw(batch);
     }
 
-    private void drawBackground(SpriteBatch batch) {
-        batch.setProjectionMatrix(_entityWorld.get(BreakoutCamera.class).getMatrix());
+    private void drawBackground(SpriteBatch batch, ShapeRenderer shapeRenderer) {
         Gdx.gl.glClearColor(25 / 255f, 113 / 255f, 146 / 255f, 1f);  // background color
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.end();
+        drawKillZone(shapeRenderer, Constants.KILLZONE_HEIGHT);
+        batch.begin();
+    }
+
+    private void drawKillZone(ShapeRenderer shapeRenderer, float height) {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setProjectionMatrix(_entityWorld.get(BreakoutCamera.class).getMatrix());
+
+        for (int i = 0; i < Constants.WORLD_SIZE.x; i += 3) {
+            shapeRenderer.line(i, height,  i + 2, height);
+        }
+
+        shapeRenderer.end();
     }
 
     private void drawEndScreen(SpriteBatch batch) {

@@ -4,14 +4,17 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Breakout extends ApplicationAdapter {
     private SpriteBatch _batch;
+    private ShapeRenderer _shapeRenderer;
     private ScreenManager _screenManager;
 
     @Override
     public void create () {
         _batch = new SpriteBatch();
+        _shapeRenderer = new ShapeRenderer();
 
         BitmapFont font = new BitmapFont();
         _screenManager = new ScreenManager(font);
@@ -32,7 +35,7 @@ public class Breakout extends ApplicationAdapter {
 
     private void draw() {
         _batch.begin();
-        _screenManager.drawScreen(_batch);
+        _screenManager.drawScreen(_batch, _shapeRenderer);
         _batch.end();
     }
 }
