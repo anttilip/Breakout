@@ -23,6 +23,8 @@ public class GameOverScreen extends Screen {
     private String smallText;
     private String infoText;
     private Matrix4 normalProjection;
+    private int inputDelay;
+    private long initTime;
 
     public GameOverScreen(ScreenManager screenManager, int finalScore) {
         super(screenManager);
@@ -31,6 +33,8 @@ public class GameOverScreen extends Screen {
         this.smallText = "Your final score\nwas: " + finalScore;
         this.infoText = "Tap anywhere to try again";
         this.layout = new GlyphLayout();
+        this.inputDelay = 1 * 1000;
+        this.initTime = System.currentTimeMillis();
 
         this.normalProjection = new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(),
                 Gdx.graphics.getHeight());
@@ -38,7 +42,8 @@ public class GameOverScreen extends Screen {
 
     @Override
     void update(float deltaTime) {
-        if (Gdx.input.justTouched()) {
+        long millisSinceInit = System.currentTimeMillis() - this.initTime;
+        if (millisSinceInit > this.inputDelay && Gdx.input.justTouched()) {
             super._screenManager.changeScreen(new GameScreen(this._screenManager));
         }
     }
