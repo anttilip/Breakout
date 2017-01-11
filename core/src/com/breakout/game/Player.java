@@ -51,7 +51,10 @@ public class Player {
         if (this.lives == 0) {
             this.alive = false;
         }
+
+        // When life is lost, shake the camera
         this.entityWorld.get(BreakoutCamera.class).shakeCamera(0.2f);
+
     }
 
     public void gainLife() {

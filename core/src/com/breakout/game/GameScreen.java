@@ -49,18 +49,14 @@ public class GameScreen extends Screen{
     void draw(SpriteBatch batch, ShapeRenderer shapeRenderer) {
         batch.setProjectionMatrix(_entityWorld.get(BreakoutCamera.class).getMatrix());
         drawBackground(batch, shapeRenderer);
-        drawGameObjects(batch);
-
-        if (this._entityWorld.getPlayer().isAlive()) {
-            drawGameObjects(batch);
-        } else {
-            this._screenManager.changeScreen(new GameOverScreen(this._screenManager,
-                    this._entityWorld.getPlayer().getScore()));
-        }
-    }
-
-    private void drawGameObjects(SpriteBatch batch) {
         this._entityWorld.draw(batch);
+
+        if (!(this._entityWorld.getPlayer().isAlive() || this._entityWorld.get(BreakoutCamera.class).isCurrentlyShaking())) {
+            // If player has no lives left and camera has stopped shaking, display GameOverScreen
+               this._screenManager.changeScreen(new GameOverScreen(this._screenManager,
+                    this._entityWorld.getPlayer().getScore()));
+
+        }
     }
 
     private void drawBackground(SpriteBatch batch, ShapeRenderer shapeRenderer) {

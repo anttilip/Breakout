@@ -14,6 +14,7 @@ public class BreakoutCamera extends GameObject {
     private OrthographicCamera _cam;
     private float shakingElapsed;
     private float shakingDuration;
+    private boolean currentlyShaking;
 
 
     public BreakoutCamera(EntityWorld entityWorld) {
@@ -62,6 +63,8 @@ public class BreakoutCamera extends GameObject {
         // Camera shake effect
         if (this.shakingElapsed < shakingDuration) {
             shake(deltaTime);
+        } else {
+            this.currentlyShaking = false;
         }
         _cam.update();
     }
@@ -72,6 +75,7 @@ public class BreakoutCamera extends GameObject {
     }
 
     public void shakeCamera(float duration) {
+        this.currentlyShaking = true;
         this.shakingElapsed = 0;
         this.shakingDuration = duration;
     }
@@ -86,5 +90,7 @@ public class BreakoutCamera extends GameObject {
         this.shakingElapsed += deltaTime;
     }
 
-
+    public boolean isCurrentlyShaking() {
+        return this.currentlyShaking;
+    }
 }
